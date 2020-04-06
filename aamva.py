@@ -1183,7 +1183,7 @@ class AAMVA:
     eyes = fields['DAY'] #(REQUIRED 2013 k.)
     assert eyes in EYECOLOURS, "Invalid eye colour: {0}".format(hair)
 
-    height = fields['DAU'] #(REQUIRED 2013 l.)
+    height = fields['DAU'].strip() #(REQUIRED 2013 l.)
     if height[-2:] == 'in': #inches
       height = int(height[0:3])
       units = IMPERIAL
@@ -1192,6 +1192,12 @@ class AAMVA:
       height = int(height[0:3])
       units = METRIC
       height = Height(height)
+    elif len(height)==3:
+      # some amazing U.S. DMVs (DC) just include feet/in as 
+      # three digits, no unit suffix: eg 508 for 5'8"
+      height = int(height[0])*12 + int(height[1:2])
+      units = IMPERIAL
+      height = Height(height, format='USA')
     else:
       raise AssertionError("Invalid unit for height")
 
