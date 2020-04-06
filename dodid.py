@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 #*-* coding: utf-8 *-*
 
+from __future__ import print_function
+
 import datetime
 
 #3 versions in circulation (no version 0?)
@@ -470,12 +472,12 @@ if __name__ == '__main__':
   ser = serial.Serial('/dev/ttyUSB0')
   while True:
     charbuffer = ""
-    print "Scan an ID"
+    print("Scan an ID")
     while charbuffer[-2:] != '\r\n':
       char = ser.read(1)
       charbuffer += char
     #try:
-    print "Got string: " + charbuffer + "\n\n\n\n"
+    print("Got string: " + charbuffer + "\n\n\n\n")
     
     pprint.pprint(decoder._decodeCACBarcode(charbuffer))
     

@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.clock import mainthread
@@ -71,7 +73,7 @@ class RootWidget(BoxLayout):
         expired_text = ""
         if expired:
             expired_text = "[color=#ff0000][b]Expired {0}[/b][/color]\n".format(str(data['expiry']))
-        print data['expiry']
+        print(data['expiry'])
 
         # TODO: Show name fields
 

@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 #*-* coding: utf-8 *-*
 
+from __future__ import print_function
+
 import sys
 import wx
 import threading
@@ -20,8 +22,8 @@ if len(sys.argv) == 3:
     BASE_URL = sys.argv[1]
     SERIAL_DEVICE = sys.argv[2]
 else:
-    print "Usage: {} <Base Add URL> <Serial port>".format(sys.argv[0])
-    print "Using defaults:\n  URL: {}\n  Port: {}\n".format(BASE_URL, SERIAL_DEVICE)
+    print("Usage: {} <Base Add URL> <Serial port>".format(sys.argv[0]))
+    print("Using defaults:\n  URL: {}\n  Port: {}\n".format(BASE_URL, SERIAL_DEVICE))
 
 
 def xstr(s):
@@ -254,7 +256,7 @@ class AAMVATestFrame(wx.Frame):
         dlg.Destroy()
 
     def ProcessScan(self, evt):
-        print "Got a scan!"
+        print("Got a scan!")
 
         try:
             license = self.parser.decode(evt.data)

@@ -45,6 +45,8 @@
 # keyboard support: http://blog.flip-edesign.com/_rst/MagTek_USB_Card_Reader_Hacking_with_Python.html
 #TODO: Add federal commercial driving codes "DCH" to all versions.
 
+from __future__ import print_function
+
 import datetime
 
 debug = False
@@ -402,11 +404,11 @@ class AAMVA:
       #~ offset = data[23:27]
       #~ assert offset.isdigit(), 'Subfile offset is not an integer'
       #~ offset = int(offset)
-      #~ print "Offset: " + str(offset)
+      #~ print("Offset: " + str(offset))
       #~ length = data[27:31]
       #~ assert length.isdigit(), 'Subfile length is not an integer'
       #~ length = int(length)
-      #~ print "Length: " + str(length)
+      #~ print("Length: " + str(length))
 
       if version == 3: decodeFunction = self._decodeBarcode_v3
       if version == 4: decodeFunction = self._decodeBarcode_v4
@@ -1634,7 +1636,7 @@ class Weight:
 
 def log(string):
   """Barebones logging"""
-  if debug: print string
+  if debug: print(string)
 
 if __name__ == '__main__':
   import pprint
@@ -1645,23 +1647,23 @@ if __name__ == '__main__':
     #~ try: #Reading from an HID card reader (stdin)
       #~ pprint.pprint(parser.decode(raw_input("Swipe a card")))
     #~ except ReadError as e:
-      #~ print e
-      #~ print "Read error.  Try again."
+      #~ print(e)
+      #~ print("Read error.  Try again.")
 
   #reading from a serial barcode reader
   import serial
   ser = serial.Serial('/dev/ttyACM0')
   while True:
     charbuffer = ""
-    print "Scan a license"
+    print("Scan a license")
     while charbuffer[-2:] != '\r\n':
       char = ser.read(1)
       charbuffer += char
     try:
-      print "Got string: " + repr(charbuffer) + "\n\n\n\n"
+      print("Got string: " + repr(charbuffer) + "\n\n\n\n")
       pprint.pprint(parser._decodeBarcode(str(charbuffer)))
     except Exception as e:
-      print "Parse error. Try again"
-      print e
+      print("Parse error. Try again")
+      print(e)
 
   ser.close()

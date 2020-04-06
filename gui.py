@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 #*-* coding: utf-8 *-*
 
+from __future__ import print_function
+
 import wx
 import threading
 import serial
@@ -231,7 +233,7 @@ class AAMVATestFrame(wx.Frame):
         dlg.Destroy()
 
     def ProcessScan(self, evt):
-        print "Got a scan!"
+        print("Got a scan!")
 
         try:
             license = self.parser.decode(evt.data)
