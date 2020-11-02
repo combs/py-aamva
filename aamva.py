@@ -327,7 +327,7 @@ class AAMVA:
       #subfile designator
       # FIXME could also be 'ID'
       assert (data[19:21] == 'DL' or data[19:21] == 'ID'), \
-        "Not a driver's license (Got '%s', should be 'DL')" % data[19:21]
+        "Not a driver's license (Got '{}', should be 'DL' for version {})".format(data[19:21], version)
       offset = data[21:25]
       assert offset.isdigit(), 'Subfile offset is not an integer'
       offset = int(offset)
@@ -378,23 +378,23 @@ class AAMVA:
       log("Entries: " + str(nEntries))
 
       #parse subfile designators
-      readOffset = 0
+      readOffset = (4 + 5 + 6 + 2 + 2 + 2)
       recordType = None
 
       for fileId in range(nEntries):
         #Read each subfile designator
         log("=== Subfile {0} ===".format(fileId))
         if recordType is None: #Subfile type determines document type
-          recordType = data[readOffset+21:readOffset+23]
-        offset = data[readOffset+23:readOffset+27]
-        length = data[readOffset+27:readOffset+31]
+          recordType = data[readOffset:readOffset+2]
+        offset = data[readOffset+2:readOffset+6]
+        length = data[readOffset+6:readOffset+10]
         assert offset.isdigit(), 'Subfile offset is not an integer'
         assert length.isdigit(), 'Subfile length is not an integer'
         offset = int(offset)
         length = int(length)
         log("Offset: {0}".format(offset))
         log("Length: {0}".format(length))
-        subfiles_raw.append(data[offset:offset+length])  #suck in all of record
+        subfiles_raw.append(data[readOffset:readOffset+length])  #suck in all of record
         log(data[offset:offset+length])
         log("=== End Subfile ===")
         readOffset += 10
@@ -430,7 +430,7 @@ class AAMVA:
     if debug: pprint.pprint(subfile)
 
     assert subfile[0][:2] == 'DL' or subfile[0][:2] == 'ID',\
-      "Not a driver's license (Got '%s', should be 'DL')" % subfile[0][:2]
+      "Not a driver's license (Got '%s', should be 'DL' in subfile)" % subfile[0][:2]
     subfile[0] = subfile[0][2:] #remove prepended "DL"
     subfile[-1] = subfile[-1].strip(segterm)
     #Decode fields as a dictionary
@@ -637,7 +637,10 @@ class AAMVA:
 
     #Eye colour is mandatory
     eyes = fields['DAY']
-    assert eyes in EYECOLOURS, "Invalid eye colour: {0}".format(eyes)
+    if eyes == "NONE":
+        eyes = None
+    else:
+        assert eyes in EYECOLOURS, "Invalid eye colour: {0}".format(eyes)
 
     #But hair colour is optional for some reason in this version
     try:
